@@ -38,7 +38,7 @@ export class TopImage extends Component {
                 wait={700}
               >
                 <h1 className="title">
-                  Redux Easy Boilerplate
+                  Urban Misery
                 </h1>
               </LoadingOrderAnimation>
               <LoadingOrderAnimation animation="fade-in"
@@ -48,7 +48,7 @@ export class TopImage extends Component {
                 wait={900}
               >
                 <p>
-                  Start your project easy and fast with modern tools
+                  A visual tool designed to help you learn about your new city.
                 </p>
               </LoadingOrderAnimation>
             </div>
