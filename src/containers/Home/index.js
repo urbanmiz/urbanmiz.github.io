@@ -3,13 +3,11 @@ import DocumentMeta from 'react-document-meta';
 
 /* components */
 import { TopImage } from 'components/TopImage';
-import { Tools } from 'components/Tools';
-import { Projects } from 'components/Projects';
 
 const metaData = {
-  title: 'Redux Easy Boilerplate',
-  description: 'Start you project easy and fast with modern tools',
-  canonical: 'http://example.com/path/to/page',
+  title: 'Urban Misery',
+  description: 'Visualizing your new city',
+  canonical: 'https://brandonmp.github.io/urban-misery',
   meta: {
     charset: 'utf-8',
     name: {
@@ -24,8 +22,6 @@ export class Home extends Component {
       <section>
         <DocumentMeta {...metaData} />
         <TopImage />
-        <Tools />
-        <Projects />
       </section>
     );
   }
