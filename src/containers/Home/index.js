@@ -5,7 +5,7 @@ import DocumentMeta from 'react-document-meta';
 import { TopImage } from 'components/TopImage';
 
 const metaData = {
-  title: 'Urban Misery',
+  title: 'Urban Miser',
   description: 'Visualizing your new city',
   canonical: 'https://brandonmp.github.io/urban-misery',
   meta: {
