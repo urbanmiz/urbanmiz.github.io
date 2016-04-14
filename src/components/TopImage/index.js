@@ -48,7 +48,7 @@ export class TopImage extends Component {
                 wait={900}
               >
                 <p>
-                  A visual tool designed to help you learn about Boston.
+                  Explore Boston through transit quality.
                 </p>
               </LoadingOrderAnimation>
             </div>
