@@ -1,0 +1,12 @@
+:local(.styles) {
+  .button {
+    background: #eee;
+    color: #000;
+    display: block;
+    margin-top: 2em;
+
+    &:hover {
+      background: #ddd;
+    }
+  }
+}
