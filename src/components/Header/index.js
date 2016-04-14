@@ -17,13 +17,25 @@ export class Header extends Component {
             </div>
 
             <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-
+              <nav>
+                <Link to="/home" activeClassName="active">
+                  Incoming residents
+                </Link>
+                <Link to="/list" activeClassName="active">
+                  Transit planners
+                </Link>
+              </nav>
             </div>
 
             <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs text-right">
-              <a href="https://github.com/anorudes/redux-easy-boilerplate">
-                Fork me on GitHub
-              </a>
+              <nav>
+                <Link to="/data" activeClassName="active">
+                  Data
+                </Link>
+                <Link to="/process-book" activeClassName="active">
+                  Process book
+                </Link>
+              </nav>
             </div>
           </div>
         </div>
