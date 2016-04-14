@@ -16,7 +16,7 @@ export class Springboard extends Component {
           </div>
 
           <div className="row">
-            <Link to="/nerds" className="col-sm-6 col-sm-offset-3 button">
+            <Link to="/nerds" className="col-sm-6 col-sm-offset-3 button button-last">
               <h3>Transit planners and existing residents</h3>
               <p>See where Boston transit is weak.</p>
             </Link>

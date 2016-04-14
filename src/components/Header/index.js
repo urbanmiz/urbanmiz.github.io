@@ -35,6 +35,9 @@ export class Header extends Component {
                 <a href="https://docs.google.com/" target="_blank">
                   Process book
                 </a>
+                <a href="https://github.com/urbanmiz/urbanmiz.github.io" target="_blank">
+                  GitHub
+                </a>
               </nav>
             </div>
           </div>
