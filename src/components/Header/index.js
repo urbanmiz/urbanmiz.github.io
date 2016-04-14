@@ -18,10 +18,10 @@ export class Header extends Component {
 
             <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
               <nav>
-                <Link to="/home" activeClassName="active">
+                <Link to="/incoming" activeClassName="active">
                   Incoming residents
                 </Link>
-                <Link to="/list" activeClassName="active">
+                <Link to="/nerds" activeClassName="active">
                   Transit planners
                 </Link>
               </nav>
@@ -32,9 +32,9 @@ export class Header extends Component {
                 <Link to="/data" activeClassName="active">
                   Data
                 </Link>
-                <Link to="/process-book" activeClassName="active">
+                <a href="https://docs.google.com/" target="_blank">
                   Process book
-                </Link>
+                </a>
               </nav>
             </div>
           </div>

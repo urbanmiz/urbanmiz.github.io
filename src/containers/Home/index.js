@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DocumentMeta from 'react-document-meta';
 
 /* components */
+import { Springboard } from 'components/Springboard';
 import { TopImage } from 'components/TopImage';
 
 const metaData = {
@@ -22,6 +23,7 @@ export class Home extends Component {
       <section>
         <DocumentMeta {...metaData} />
         <TopImage />
+        <Springboard />
       </section>
     );
   }
