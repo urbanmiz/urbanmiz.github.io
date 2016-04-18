@@ -1,0 +1,122 @@
+[
+  {
+    "year": 1991,
+    "revenue": 168423237,
+    "expenses": 553198340
+  },
+  {
+    "year": 1992,
+    "revenue": 177845663,
+    "expenses": 570780153
+  },
+  {
+    "year": 1993,
+    "revenue": 186571709,
+    "expenses": 593091196
+  },
+  {
+    "year": 1994,
+    "revenue": 199353750,
+    "expenses": 621151791
+  },
+  {
+    "year": 1995,
+    "revenue": 205648867,
+    "expenses": 561160866
+  },
+  {
+    "year": 1996,
+    "revenue": 210993137,
+    "expenses": 549351852
+  },
+  {
+    "year": 1997,
+    "revenue": 219174563,
+    "expenses": 572205957
+  },
+  {
+    "year": 1998,
+    "revenue": 239323638,
+    "expenses": 618389023
+  },
+  {
+    "year": 1999,
+    "revenue": 247126878,
+    "expenses": 694076253
+  },
+  {
+    "year": 2000,
+    "revenue": 259326414,
+    "expenses": 710621268
+  },
+  {
+    "year": 2001,
+    "revenue": 318704758,
+    "expenses": 736840166
+  },
+  {
+    "year": 2002,
+    "revenue": 321118754,
+    "expenses": 772735364
+  },
+  {
+    "year": 2003,
+    "revenue": 317566864,
+    "expenses": 800787491
+  },
+  {
+    "year": 2004,
+    "revenue": 344936258,
+    "expenses": 836255438
+  },
+  {
+    "year": 2005,
+    "revenue": 367022674,
+    "expenses": 888006076
+  },
+  {
+    "year": 2006,
+    "revenue": 380309966,
+    "expenses": 937578085
+  },
+  {
+    "year": 2007,
+    "revenue": 431621571,
+    "expenses": 980475100
+  },
+  {
+    "year": 2008,
+    "revenue": 489797402,
+    "expenses": 1037720504
+  },
+  {
+    "year": 2009,
+    "revenue": 506754638,
+    "expenses": 1137993920
+  },
+  {
+    "year": 2010,
+    "revenue": 499503508,
+    "expenses": 1176964653
+  },
+  {
+    "year": 2011,
+    "revenue": 511205799,
+    "expenses": 1219941342
+  },
+  {
+    "year": 2012,
+    "revenue": 513189122,
+    "expenses": 1292576585
+  },
+  {
+    "year": 2013,
+    "revenue": 614717079,
+    "expenses": 1329191083
+  },
+  {
+    "year": 2014,
+    "revenue": 624394510,
+    "expenses": 1429983519
+  }
+]

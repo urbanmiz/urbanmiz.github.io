@@ -1,0 +1,127 @@
+[
+  {
+    "year": 1990,
+    "population": 827203,
+    "ridership": 416887
+  },
+  {
+    "year": 1991,
+    "population": 813704,
+    "ridership": 414608
+  },
+  {
+    "year": 1992,
+    "population": 804363,
+    "ridership": 412366
+  },
+  {
+    "year": 1993,
+    "population": 802833,
+    "ridership": 395616
+  },
+  {
+    "year": 1994,
+    "population": 800015,
+    "ridership": 399957
+  },
+  {
+    "year": 1995,
+    "population": 806745,
+    "ridership": 404298
+  },
+  {
+    "year": 1996,
+    "population": 804243,
+    "ridership": 424374
+  },
+  {
+    "year": 1997,
+    "population": 804003,
+    "ridership": 444449
+  },
+  {
+    "year": 1998,
+    "population": 802572,
+    "ridership": 517696
+  },
+  {
+    "year": 1999,
+    "population": 802206,
+    "ridership": 590942
+  },
+  {
+    "year": 2000,
+    "population": 853414,
+    "ridership": 588676
+  },
+  {
+    "year": 2001,
+    "population": 867431,
+    "ridership": 659500
+  },
+  {
+    "year": 2002,
+    "population": 873203,
+    "ridership": 664400
+  },
+  {
+    "year": 2003,
+    "population": 871820,
+    "ridership": 656400
+  },
+  {
+    "year": 2004,
+    "population": 870570,
+    "ridership": 633000
+  },
+  {
+    "year": 2005,
+    "population": 872552,
+    "ridership": 617300
+  },
+  {
+    "year": 2006,
+    "population": 875076,
+    "ridership": 638400
+  },
+  {
+    "year": 2007,
+    "population": 887939,
+    "ridership": 719400
+  },
+  {
+    "year": 2008,
+    "population": 904099,
+    "ridership": 733637
+  },
+  {
+    "year": 2009,
+    "population": 915023,
+    "ridership": 719579
+  },
+  {
+    "year": 2010,
+    "population": 886713,
+    "ridership": 719933
+  },
+  {
+    "year": 2011,
+    "population": 899035,
+    "ridership": 718638
+  },
+  {
+    "year": 2012,
+    "population": 911857,
+    "ridership": 752700
+  },
+  {
+    "year": 2013,
+    "population": 924433,
+    "ridership": 766960
+  },
+  {
+    "year": 2014,
+    "population": 932766,
+    "ridership": 788400
+  }
+]
