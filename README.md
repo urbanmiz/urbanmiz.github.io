@@ -1,5 +1,7 @@
+## Prototype V1 Grading note
 
-
+Ignore the below instructions—simply open index.html in your browser,
+and you'll be good to go.
 
 
 ## Development

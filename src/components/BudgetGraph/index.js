@@ -1,4 +1,5 @@
 import d3Wrap from 'react-d3-wrap';
+import d3tip from 'd3-tip';
 
 import { styles } from './styles.scss';
 
@@ -41,6 +42,9 @@ const BudgetGraph = d3Wrap({
     var expensesLine = d3.svg.line()
         .x(function(d) { return x(d.year); })
         .y(function(d) { return y(d.expenses); });
+
+    var revenueTip = d3tip().attr('class', 'd3-tip').html(function(d) { return d.year.getFullYear() + ": " + d.revenue; });
+    var expensesTip = d3tip().attr('class', 'd3-tip').html(function(d) { return d.year.getFullYear() + ": " + d.expenses; });
 
     const chart = d3.select(svg)
         .append("g")
@@ -89,14 +93,21 @@ const BudgetGraph = d3Wrap({
         .attr("class", "dot")
         .attr("cx", expensesLine.x())
         .attr("cy", expensesLine.y())
-        .attr("r", 3.5);
+        .attr("r", 3.5)
+        .on('mouseover', expensesTip.show)
+        .on('mouseout', expensesTip.hide);
 
     dots
       .append("circle")
         .attr("class", "dot")
         .attr("cx", revenueLine.x())
         .attr("cy", revenueLine.y())
-        .attr("r", 3.5);
+        .attr("r", 3.5)
+        .on('mouseover', revenueTip.show)
+        .on('mouseout', revenueTip.hide);
+
+    chart.call(revenueTip);
+    chart.call(expensesTip);
 
     chart.append("text")
       .attr("transform", "translate(" + (width+8) + "," + y(data[data.length-1].revenue) + ")")

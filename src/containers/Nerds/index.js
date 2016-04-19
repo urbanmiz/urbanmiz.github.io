@@ -84,6 +84,7 @@ export class Nerds extends Component {
             <h1>Compare neighborhoods</h1>
             <p>Choose up to ten neighborhoods from above.</p>
             <BlockGroupComparison data={this.state.selection} width={960} height={500} />
+            <p>Hint: try brushing regions of interest on the axes, or reordering axes by dragging.</p>
           </div>
         </div>
       </section>

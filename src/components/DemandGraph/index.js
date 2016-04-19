@@ -1,4 +1,5 @@
 import d3Wrap from 'react-d3-wrap';
+import d3tip from 'd3-tip';
 
 import { styles } from './styles.scss';
 
@@ -40,6 +41,9 @@ const DemandGraph = d3Wrap({
     var populationLine = d3.svg.line()
         .x(function(d) { return x(d.year); })
         .y(function(d) { return y(d.population); });
+
+    var ridershipTip = d3tip().attr('class', 'd3-tip').html(function(d) { return d.year.getFullYear() + ": " + d.ridership; });
+    var populationTip = d3tip().attr('class', 'd3-tip').html(function(d) { return d.year.getFullYear() + ": " + d.population; });
 
     const chart = d3.select(svg)
         .append("g")
@@ -88,14 +92,21 @@ const DemandGraph = d3Wrap({
         .attr("class", "dot")
         .attr("cx", populationLine.x())
         .attr("cy", populationLine.y())
-        .attr("r", 3.5);
+        .attr("r", 3.5)
+        .on('mouseover', populationTip.show)
+        .on('mouseout', populationTip.hide);;
 
     dots
       .append("circle")
         .attr("class", "dot")
         .attr("cx", ridershipLine.x())
         .attr("cy", ridershipLine.y())
-        .attr("r", 3.5);
+        .attr("r", 3.5)
+        .on('mouseover', ridershipTip.show)
+        .on('mouseout', ridershipTip.hide);
+
+    chart.call(ridershipTip);
+    chart.call(populationTip);
 
     chart.append("text")
       .attr("transform", "translate(" + (width+8) + "," + y(data[data.length-1].ridership) + ")")
