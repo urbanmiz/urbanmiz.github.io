@@ -2,8 +2,6 @@ import d3Wrap from 'react-d3-wrap';
 
 import { styles } from './styles.scss';
 
-console.log(styles);
-
 const DemandGraph = d3Wrap({
   initialize (svg, data, options) {
     svg.classList.add(styles);
@@ -47,7 +45,10 @@ const DemandGraph = d3Wrap({
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    console.log(data);
+    if (this.chart) {
+      this.chart.remove();
+    }
+    this.chart = chart;
 
     data = data.map(d => ({
       year: parseDate(d.year.toString()),

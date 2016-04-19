@@ -2,8 +2,6 @@ import d3Wrap from 'react-d3-wrap';
 
 import { styles } from './styles.scss';
 
-console.log(styles);
-
 const BudgetGraph = d3Wrap({
   initialize (svg, data, options) {
     svg.classList.add(styles);
@@ -47,6 +45,11 @@ const BudgetGraph = d3Wrap({
     const chart = d3.select(svg)
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    if (this.chart) {
+      this.chart.remove();
+    }
+    this.chart = chart;
 
     data = data.map(d => ({
       year: parseDate(d.year.toString()),
