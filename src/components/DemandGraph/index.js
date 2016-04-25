@@ -16,10 +16,10 @@ const DemandGraph = d3Wrap({
     var parseDate = d3.time.format("%Y").parse;
 
     var x = d3.time.scale()
-        .range([0, width]);
+        .range([0, width - 5]);
 
     var y = d3.scale.linear()
-        .range([height, 0]);
+        .range([height, 5]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -42,8 +42,13 @@ const DemandGraph = d3Wrap({
         .x(function(d) { return x(d.year); })
         .y(function(d) { return y(d.population); });
 
-    var ridershipTip = d3tip().attr('class', 'd3-tip').html(function(d) { return d.year.getFullYear() + ": " + d.ridership; });
-    var populationTip = d3tip().attr('class', 'd3-tip').html(function(d) { return d.year.getFullYear() + ": " + d.population; });
+    var ridershipTip = d3tip()
+      .attr('class', 'd3-tip')
+      .html(d => `${d.year.getFullYear()}<br>${d3.format(",g")(d.ridership)} people`);
+
+    var populationTip = d3tip()
+      .attr('class', 'd3-tip')
+      .html(d => `${d.year.getFullYear()}<br>${d3.format(",g")(d.population)} people`);
 
     const chart = d3.select(svg)
         .append("g")
@@ -62,6 +67,12 @@ const DemandGraph = d3Wrap({
 
     x.domain(d3.extent(data, function(d) { return d.year; }));
     y.domain([0, d3.max(data, function(d) { return d.population; })]);
+
+    chart.append("clipPath")
+      .attr("id", "clip")
+    .append("rect")
+      .attr("width", width)
+      .attr("height", height);
 
     chart.append("path")
         .datum(data)
@@ -93,8 +104,9 @@ const DemandGraph = d3Wrap({
         .attr("cx", populationLine.x())
         .attr("cy", populationLine.y())
         .attr("r", 3.5)
+        .attr("clip-path", "url(#clip)")
         .on('mouseover', populationTip.show)
-        .on('mouseout', populationTip.hide);;
+        .on('mouseout', populationTip.hide);
 
     dots
       .append("circle")
@@ -102,6 +114,7 @@ const DemandGraph = d3Wrap({
         .attr("cx", ridershipLine.x())
         .attr("cy", ridershipLine.y())
         .attr("r", 3.5)
+        .attr("clip-path", "url(#clip)")
         .on('mouseover', ridershipTip.show)
         .on('mouseout', ridershipTip.hide);
 
@@ -129,10 +142,6 @@ const DemandGraph = d3Wrap({
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("People");
-  },
-
-  destroy () {
-
   }
 })
 

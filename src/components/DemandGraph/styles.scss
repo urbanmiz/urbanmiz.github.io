@@ -16,6 +16,10 @@
     shape-rendering: crispEdges;
   }
 
+  .tick text {
+    font-size: 12px;
+  }
+
   .dot {
     fill: white;
     stroke: steelblue;

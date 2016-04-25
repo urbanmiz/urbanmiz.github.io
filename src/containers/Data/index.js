@@ -9,7 +9,7 @@ export class Data extends Component {
             <h1>Data</h1>
             <p>This is where our data came from:</p>
             <ul>
-              <li>TODO</li>
+              <li>Source: http://www.mbta.com/uploadedfiles/About_the_T/Financials/SOREHistoryFY16Budget.pdf</li>
             </ul>
           </div>
         </div>

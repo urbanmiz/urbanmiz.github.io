@@ -16,10 +16,10 @@ const BudgetGraph = d3Wrap({
     var parseDate = d3.time.format("%Y").parse;
 
     var x = d3.time.scale()
-        .range([0, width]);
+        .range([0, width - 5]);
 
     var y = d3.scale.linear()
-        .range([height, 0]);
+        .range([height, 5]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -43,8 +43,15 @@ const BudgetGraph = d3Wrap({
         .x(function(d) { return x(d.year); })
         .y(function(d) { return y(d.expenses); });
 
-    var revenueTip = d3tip().attr('class', 'd3-tip').html(function(d) { return d.year.getFullYear() + ": " + d.revenue; });
-    var expensesTip = d3tip().attr('class', 'd3-tip').html(function(d) { return d.year.getFullYear() + ": " + d.expenses; });
+    var revenueTip = d3tip()
+      .attr('class', 'd3-tip')
+      .html(d => `${d.year.getFullYear()}<br>$${d3.format(",.0f")(d.revenue/1000000)} million`);
+
+    var expensesTip = d3tip()
+      .attr('class', 'd3-tip')
+      .html(d => `${d.year.getFullYear()}<br>` +
+          (d.expenses < 1000000000 ? `$${d3.format(",.1f")(d.expenses/1000000)} million`
+                                   : `$${d3.format(",.3f")(d.expenses/1000000000)} billion`));
 
     const chart = d3.select(svg)
         .append("g")
@@ -63,6 +70,12 @@ const BudgetGraph = d3Wrap({
 
     x.domain(d3.extent(data, function(d) { return d.year; }));
     y.domain([0, d3.max(data, function(d) { return d.expenses; })]);
+
+    chart.append("clipPath")
+      .attr("id", "clip")
+    .append("rect")
+      .attr("width", width)
+      .attr("height", height);
 
     chart.append("path")
         .datum(data)
@@ -94,6 +107,7 @@ const BudgetGraph = d3Wrap({
         .attr("cx", expensesLine.x())
         .attr("cy", expensesLine.y())
         .attr("r", 3.5)
+        .attr("clip-path", "url(#clip)")
         .on('mouseover', expensesTip.show)
         .on('mouseout', expensesTip.hide);
 
@@ -103,6 +117,7 @@ const BudgetGraph = d3Wrap({
         .attr("cx", revenueLine.x())
         .attr("cy", revenueLine.y())
         .attr("r", 3.5)
+        .attr("clip-path", "url(#clip)")
         .on('mouseover', revenueTip.show)
         .on('mouseout', revenueTip.hide);
 
@@ -130,10 +145,6 @@ const BudgetGraph = d3Wrap({
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Millions of USD");
-  },
-
-  destroy () {
-
   }
 })
 
