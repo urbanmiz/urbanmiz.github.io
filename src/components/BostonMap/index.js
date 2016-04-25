@@ -41,6 +41,12 @@ const BostonMap = d3Wrap({
       this.updateLines();
     }
 
+    this.whenTime = 360;
+    this.setWhenTime = (whenTime) => {
+      this.whenTime = whenTime;
+      this.updateLines();
+    }
+
     this.export = () =>
       Array.from(this.selected).map(d => ({
         "ID": d.TARGET_FID,
@@ -48,7 +54,8 @@ const BostonMap = d3Wrap({
         "Households": d.TOT_HSHD,
         "Transit mode share": d.TRANSIT,
         "Zero vehicle households": d.ZERO_VEH,
-        "Median income": d.MED_INC
+        "Median income": d.MED_INC,
+        "City": d.TOWN,
       }));
 
     this.shouldComponentUpdate = () => false;
@@ -175,11 +182,15 @@ ${frequencyTip(d)}`)
 
     var lineScale = d3.scale.quantize()
         .domain([0, 1])
-        .range(d3.range(9).map(function(i) { return 8 - i; }));;
+        .range(d3.range(9).map(function(i) { return 8 - i; }));
+
+    var congestionScale = d3.scale.log()
+        .domain([1, 100])
+        .range([2, 20]);
 
     var line = d3.svg.line();
 
-    var varline = function (sw, ew) {
+    var varline = function (sw, ew, log = false) {
       return function(d) {
         var p = path(d);
         if (!p) {
@@ -206,11 +217,16 @@ ${frequencyTip(d)}`)
             var dx = d[i][0] - d[i-1][0];
             var dy = d[i][1] - d[i-1][1];
           }
-          dist += Math.sqrt(dx * dx + dy * dy);
           var slope = Math.atan2(dy, dx);
           var up = slope + Math.PI / 2;
           var down = slope - Math.PI / 2;
+          if (i > 0) {
+            dist += Math.sqrt(dx * dx + dy * dy);
+          }
           var w = (dist / totalDist) * distDiff + sw;
+          if (log) {
+            console.log(dist, totalDist, w);
+          }
           top.push([d[i][0] + w * Math.cos(up), d[i][1] + w * Math.sin(up)]);
           bottom.push([d[i][0] + w * Math.cos(down), d[i][1] + w * Math.sin(down)]);
         }
@@ -242,13 +258,14 @@ ${frequencyTip(d)}`)
         .append("text")
         .text("here!")
 
-    require(["./blockGroups.json", "./subwayLines.json", "./busLines.json"], (blockGroups, subwayLines, busLines) => {
+    require(["./blockGroups.json", "./subwayLines.json", "./busLines.json", "./congestion.json"], (blockGroups, subwayLines, busLines, congestion) => {
       const featureCollection = topojson.feature(blockGroups, blockGroups.objects.blockGroups);
       const subwayLinesCollection = topojson.feature(subwayLines, subwayLines.objects.subwayLines);
       const busLinesCollection = topojson.feature(busLines, busLines.objects.busLines);
 
       console.log(subwayLinesCollection);
       console.log(busLinesCollection);
+      console.log(congestion);
 
       this.chart
         .append("g")
@@ -268,7 +285,6 @@ ${frequencyTip(d)}`)
         .selectAll("path")
           .data(subwayLinesCollection.features.filter(d => d.properties.LINE !== "GREEN"))
         .enter().append("path")
-          .attr("d", varline(2, 10))
         .on("mouseover", subwayTip.show)
         .on("mouseout", subwayTip.hide);
 
@@ -307,12 +323,23 @@ ${frequencyTip(d)}`)
             d.properties[this.when]
           ).filter(v => v !== 0)));
           subwayPath.style("stroke", d => colorbrewer.Reds[9][lineScale(d.properties[this.when])]);
-          congestionPath.style("fill", d => colorbrewer.Reds[9][lineScale(d.properties[this.when])]);
           busPath.style("stroke-dasharray", d => d.properties[this.when] === 0 ? "10,10" : "")
           busPath.style("stroke", d => colorbrewer.Reds[9][lineScale(d.properties[this.when])]);
         } else {
           subwayPath.style("stroke", d => d.properties.LINE.toLowerCase());
           congestionPath.style("fill", d => LIGHT_COLORS[d.properties.LINE]);
+          congestionPath.style("stroke", d => LIGHT_COLORS[d.properties.LINE]);
+          congestionPath.style("stroke-width", 2);
+          congestionPath.style("stroke-alignment", "inner");
+          congestionPath.attr("d", d => {
+            let c = congestion[this.whenTime];
+            let [b, e] = d.properties.STATIONS.split(",");
+            if (!b) b = "";
+            if (!e) e = "";
+            b = b.replace("Assembly", "Sullivan Square");
+            e = e.replace("Assembly", "Sullivan Square");
+            return varline(congestionScale(c[b] || 1), congestionScale(c[e] || 1), b === "Davis" || e === "Davis")(d);
+          })
           busPath.style("stroke", "purple");
           busPath.style("stroke-dasharray", "")
         }

@@ -1,5 +1,6 @@
 /* global styles */
 
+@import 'rc-slider/assets/index.css';
 @import 'fonts/roboto';
 @import 'typography';
 @import 'links';
@@ -72,5 +73,16 @@
     font-weight: normal !important;
     font-size: 16px !important;
     padding: 0.1em 0.3em;
+  }
+
+  label {
+    font-weight: normal;
+    margin: 0;
+
+    input[type=radio],
+    input[type=checkbox] {
+      display: inline-block;
+      margin-right: 3px;
+    }
   }
 }

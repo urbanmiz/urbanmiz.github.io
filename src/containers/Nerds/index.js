@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Slider from 'rc-slider';
 
 import DemandGraph from 'components/DemandGraph';
 import BudgetGraph from 'components/BudgetGraph';
@@ -12,13 +13,79 @@ export class Nerds extends Component {
     super(props)
     this.state = {
       blockGroup: null,
-      selection: []
+      selection: [],
+      when: 600
+    }
+    this.sliderMarks = {
+      360: this.formatSlider(360), 540: this.formatSlider(540),
+      720: this.formatSlider(720), 900: this.formatSlider(900),
+      1080: this.formatSlider(1080), 1260: this.formatSlider(1260),
+      1440: this.formatSlider(1440)
     }
   }
 
   handleMapReset = () => {
     this.refs.map.reset();
   }
+
+  setWhat = (what) => {
+    this.refs.map.classed({ frequency: what === "frequency", congestion: what === "congestion"})
+    this.setState({ what: what });
+  }
+
+  sliderChange = (v) => {
+    this.refs.map.setWhenTime(v);
+  }
+
+  formatSlider = (v) => d3.time.format("%I:%M %p")(new Date(1970, 1, 1, v / 60, v % 60));
+
+  renderFrequency = () => (
+    <div>
+      Display frequency during:&nbsp;
+      <select onChange={(e) => this.refs.map.setWhen(e.currentTarget.value)}>
+        <option value="AM">Morning</option>
+        <option value="AM_Peak">Morning rush hour</option>
+        <option value="PM">Afternoon</option>
+        <option value="Eve">Night</option>
+        <option value="Sat_Pk">Saturday peak</option>
+        <option value="Sun_Pk">Sunday peak</option>
+      </select>
+    </div>
+  )
+
+  renderCongestion = () => (
+    <div style={{width: 400}}>
+      Display congestion at:
+      <Slider
+        min={300}
+        max={1440}
+        tipFormatter={this.formatSlider}
+        marks={this.sliderMarks}
+        defaultValue={360}
+        onChange={this.sliderChange} />
+    </div>
+  )
+
+  renderComparison = () => (
+    <div>
+      <BlockGroupComparison data={this.state.selection} width={960} height={500} />
+      <p>
+        Try brushing regions of interest on the axes, or reordering axes by
+        dragging. Patterns in the lines between adjacent dimensions indicate
+        correlations in the data.
+      </p>
+    </div>
+  )
+
+  renderNoComparison = () => {
+    let r = this.state.selection.length;
+    let remaining = (r === 0 ? "at least three block groups" : r === 1 ? "two more block groups" : "one more block group")
+    return (
+    <p>
+      To get started, select {remaining} to compare by double-clicking
+      on the map above.
+    </p>
+  )}
 
   render() {
     return (
@@ -109,10 +176,11 @@ export class Nerds extends Component {
             <div className="map-container">
               <div className="map-visualize">
                 <h4>Visualize</h4>
-                <input onChange={(e) => this.refs.map.classed({subway: e.currentTarget.checked})} type="checkbox" /> Subway lines<br />
-                <input onChange={(e) => this.refs.map.classed({bus: e.currentTarget.checked})} type="checkbox" /> Bus lines<br />
-                <input onChange={(e) => this.refs.map.classed({frequency: e.currentTarget.checked})} type="checkbox" /> Frequency<br />
-                <input onChange={(e) => this.refs.map.classed({congestion: e.currentTarget.checked})} type="checkbox" /> Congestion (RBO only)
+                <label><input ref="subwayToggle" onChange={(e) => this.refs.map.classed({subway: e.currentTarget.checked})} type="checkbox" name="subway-lines" /> Subway lines</label><br />
+                <label><input onChange={(e) => this.refs.map.classed({bus: e.currentTarget.checked})} type="checkbox" /> Bus lines</label><br /><br />
+                <label><input defaultChecked name="what" onChange={(e) => this.setWhat("none")} type="radio" /> Line color</label><br />
+                <label><input name="what" onChange={(e) => this.setWhat("frequency")} type="radio" /> Frequency</label><br />
+                <label><input name="what" onChange={(e) => this.setWhat("congestion")} type="radio" /> Congestion (RBO only)</label>
               </div>
               <BostonMap data={[]} width={960} height={720}
                 onHover={(blockGroup) => this.setState({blockGroup: blockGroup})}
@@ -132,15 +200,7 @@ export class Nerds extends Component {
               </div>
 
               <div>
-                Display frequency and congestion during:&nbsp;
-                <select onChange={(e) => this.refs.map.setWhen(e.currentTarget.value)}>
-                  <option value="AM">Morning</option>
-                  <option value="AM_Peak">Morning rush hour</option>
-                  <option value="PM">Afternoon</option>
-                  <option value="Eve">Night</option>
-                  <option value="Sat_Pk">Saturday peak</option>
-                  <option value="Sun_Pk">Sunday peak</option>
-                </select>
+                {this.state.what === "frequency" ? this.renderFrequency() : this.state.what === "congestion" ? this.renderCongestion() : ""}
               </div>
 
               <button onClick={this.handleMapReset}>Reset map</button>
@@ -152,9 +212,13 @@ export class Nerds extends Component {
         <div className="container">
           <div className="row">
             <h1>Compare neighborhoods</h1>
-            <p>Choose up to ten neighborhoods from above.</p>
-            <BlockGroupComparison data={this.state.selection} width={960} height={500} />
-            <p>Hint: try brushing regions of interest on the axes, or reordering axes by dragging.</p>
+            <p>
+              How do different block groups stack up? What factors are high
+              transit need associated with? Low income? A high number of
+              zero-vehicle households? A parallel coordinates chart can
+              efficiently unlock some of these correlations.
+            </p>
+            {this.state.selection.length >= 3 ? this.renderComparison() : this.renderNoComparison()}
           </div>
         </div>
       </section>

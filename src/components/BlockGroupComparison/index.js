@@ -37,9 +37,14 @@ const BlockGroupComparison = d3Wrap({
 
     // Extract the list of dimensions and create a scale for each.
     x.domain(dimensions = d3.keys(data[0]).filter(function(d) {
-      return d != "name" && (y[d] = d3.scale.linear()
+      return d != "name" && (y[d] = (typeof(data[0][d]) === "string" ?
+        (d3.scale.ordinal()
+          .domain(data.map(p => p[d]))
+          .rangePoints([height, 0], .1))
+        :
+        (d3.scale.linear()
           .domain(d3.extent(data, function(p) { return +p[d]; }))
-          .range([height, 0]));
+          .range([height, 0]))));
     }));
 
     // Add grey background lines for context.
