@@ -6,6 +6,7 @@ import DemandGraph from 'components/DemandGraph';
 import BudgetGraph from 'components/BudgetGraph';
 import BostonMap from 'components/BostonMap';
 import StopDistanceGraph from 'components/StopDistanceGraph';
+import NeighborhoodIncomeGraph from 'components/NeighborhoodIncomeGraph';
 import BlockGroupComparison from 'components/BlockGroupComparison';
 import bostonPopulation from './bostonPopulation.json';
 import mbtaBudget from './mbtaBudget.json';
@@ -115,6 +116,13 @@ export class Nerds extends Component {
           </p>
           <div className="chart-title">Stops within one mile</div>
           <StopDistanceGraph data={this.state.nearbyStops} width={960} height={500} />
+          <p>
+            Particularly useful is comparing this block group to other block
+            groups in the neighborhood. The standard definition of "neighborhood"
+            is used for Cambridge and Boston; for other municipalities, the city
+            average is used instead.
+          </p>
+          <NeighborhoodIncomeGraph width={700} height={500} blockGroup={this.state.selection[0].bid} />
         </div>
       );
     }

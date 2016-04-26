@@ -58,6 +58,7 @@ const BostonMap = d3Wrap({
         "City": d.TOWN,
         lat: +d.INTPTLAT,
         long: +d.INTPTLON,
+        bid: d.GISJOIN,
       }));
 
     this.shouldComponentUpdate = () => false;
