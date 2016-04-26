@@ -56,6 +56,8 @@ const BostonMap = d3Wrap({
         "Zero vehicle households": d.ZERO_VEH,
         "Median income": d.MED_INC,
         "City": d.TOWN,
+        lat: +d.INTPTLAT,
+        long: +d.INTPTLON,
       }));
 
     this.shouldComponentUpdate = () => false;
@@ -75,7 +77,6 @@ const BostonMap = d3Wrap({
     };
 
     this.classed = (classes) => {
-      console.log(classes);
       d3.select(svg).classed(classes);
       this.updateLines();
     }
@@ -111,11 +112,10 @@ const BostonMap = d3Wrap({
       if (vis.selected.has(d.properties)) {
         vis.selected.delete(d.properties);
         d3.select(this).style("fill", "");
-        return;
+      } else {
+        vis.selected.add(d.properties);
+        d3.select(this).style("fill", "#444");
       }
-
-      vis.selected.add(d.properties);
-      d3.select(this).style("fill", "#444");
 
       vis.props.onSelectionChange(vis.export());
     }
@@ -132,7 +132,7 @@ Median age: ${d.properties.MED_AGE}<br>
 Median income: ${d3.format("$,")(d.properties.MED_INC)}<br>
 Total households: ${d.properties.TOT_HSHD}<br>
 Zero vehicle households: ${d.properties.ZERO_VEH} (${d3.format(".1p")(d.properties.ZERO_VEH / d.properties.TOT_HSHD)})<br><br>
-<small>Double click to compare.</small>
+<small>Double click to select.</small>
 </div>
 `);
 
@@ -184,7 +184,7 @@ ${frequencyTip(d)}`)
         .domain([0, 1])
         .range(d3.range(9).map(function(i) { return 8 - i; }));
 
-    var congestionScale = d3.scale.log()
+    var congestionScale = d3.scale.sqrt()
         .domain([1, 100])
         .range([2, 20]);
 

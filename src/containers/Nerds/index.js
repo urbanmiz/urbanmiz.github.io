@@ -1,9 +1,11 @@
+import $ from 'jquery';
 import React, { Component } from 'react';
 import Slider from 'rc-slider';
 
 import DemandGraph from 'components/DemandGraph';
 import BudgetGraph from 'components/BudgetGraph';
 import BostonMap from 'components/BostonMap';
+import StopDistanceGraph from 'components/StopDistanceGraph';
 import BlockGroupComparison from 'components/BlockGroupComparison';
 import bostonPopulation from './bostonPopulation.json';
 import mbtaBudget from './mbtaBudget.json';
@@ -33,6 +35,22 @@ export class Nerds extends Component {
     this.setState({ what: what });
   }
 
+  setSelection = (selection) => {
+    this.setState({selection: selection, nearbyStops: null})
+    if (selection.length === 1) {
+      this.getNearbyStops(selection[0]);
+    }
+  }
+
+  getNearbyStops = (blockGroup) => {
+    $.get(`http://realtime.mbta.com/developer/api/v2/stopsbylocation?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=${blockGroup.lat}&lon=${blockGroup.long}&format=json`, (data) => {
+      let stops = data.stop.reduce((memo, d) => (
+        memo.set(d.parent_station_name || d.stop_name, +d.distance)
+      ), new Map());
+      this.setState({ nearbyStops: Array.from(stops).map(([k, v]) => ({ name: k, distance: v })) });
+    })
+  }
+
   sliderChange = (v) => {
     this.refs.map.setWhenTime(v);
   }
@@ -55,7 +73,7 @@ export class Nerds extends Component {
 
   renderCongestion = () => (
     <div style={{width: 400}}>
-      Display congestion at:
+      Display average weekday congestion at:
       <Slider
         min={300}
         max={1440}
@@ -86,6 +104,30 @@ export class Nerds extends Component {
       on the map above.
     </p>
   )}
+
+  renderDrilldown = () => {
+    if (this.state.nearbyStops) {
+      return (
+        <div>
+          <p>
+            Residents and visitors of this block group have these transit
+            stops within one mile.
+          </p>
+          <div className="chart-title">Stops within one mile</div>
+          <StopDistanceGraph data={this.state.nearbyStops} width={960} height={500} />
+        </div>
+      );
+    }
+    return <p>Loading...</p>;
+  }
+
+  renderNoDrilldown = () => (
+    <p>
+      What transit options are available to residents and visitors of a given
+      block group? Select exactly one block group above to see the nearest
+      transit stops.
+    </p>
+  )
 
   render() {
     return (
@@ -184,7 +226,7 @@ export class Nerds extends Component {
               </div>
               <BostonMap data={[]} width={960} height={720}
                 onHover={(blockGroup) => this.setState({blockGroup: blockGroup})}
-                onSelectionChange={(selection) => this.setState({selection: selection})}
+                onSelectionChange={this.setSelection}
                 ref="map" />
             </div>
             <div className="filters">
@@ -192,7 +234,7 @@ export class Nerds extends Component {
                 Visualize block groups by:&nbsp;
                 <select onChange={() => this.refs.map.quantize(this.refs.metric.value)} ref="metric">
                   <option value="">None</option>
-                  <option value="pop">Population</option>
+                  <option value="pop">Population density</option>
                   <option value="transmod">Transit mode share</option>
                   <option value="zero">Zero vehicle households</option>
                   <option value="income">Median income</option>
@@ -211,6 +253,9 @@ export class Nerds extends Component {
 
         <div className="container">
           <div className="row">
+            <h1>Block group drilldown</h1>
+            {this.state.selection.length === 1 ? this.renderDrilldown() : this.renderNoDrilldown()}
+
             <h1>Compare neighborhoods</h1>
             <p>
               How do different block groups stack up? What factors are high
