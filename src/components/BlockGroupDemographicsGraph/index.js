@@ -147,10 +147,10 @@ const NeighborhoodIncomeGraph = d3Wrap({
             .call(xAxis)
             .selectAll("text")
               .attr("y", 0)
-              .attr("x", 9)
+              .attr("x", -9)
               .attr("dy", ".35em")
-              .attr("transform", "rotate(90)")
-              .style("text-anchor", "start");
+              .attr("transform", "rotate(-90)")
+              .style("text-anchor", "end");
 
         var yAxisGroup = svg.append("g")
             .attr("class", "y-axis axis");
