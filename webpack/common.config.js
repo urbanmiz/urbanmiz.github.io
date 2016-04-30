@@ -24,6 +24,7 @@ const common = {
 
   output: {
     path: PATHS.build,
+    publicPath: "/dist/",
     filename: 'bundle.js',
   },
 
@@ -52,7 +53,7 @@ const common = {
       test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
       loader: 'file',
     }, {
-      test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+      test: /\.svg(\?v=\d+\.\d+\.\ d+)?$/,
       loader: 'url?limit=10000&mimetype=image/svg+xml',
     }, {
       test: /\.(js|jsx)$/,

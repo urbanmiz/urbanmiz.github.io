@@ -141,10 +141,6 @@ const BlockGroupComparison = d3Wrap({
         }) ? null : "none";
       });
     }
-  },
-
-  destroy () {
-
   }
 })
 

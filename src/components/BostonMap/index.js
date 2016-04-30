@@ -2,7 +2,6 @@ import d3Wrap from 'react-d3-wrap';
 import d3tip from 'd3-tip';
 import topojson from 'topojson';
 
-import { colorbrewer } from './colorbrewer';
 import { styles } from './styles.scss';
 
 let BANNED_FIDS = new Set([85 /* Charles river */]);
@@ -375,10 +374,6 @@ ${frequencyTip(d)}`)
           .text("\uE016")
           .on("click", () => zoomClick("out"));
     })
-  },
-
-  destroy () {
-
   }
 })
 
