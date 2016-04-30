@@ -75,6 +75,9 @@ const BostonMap = d3Wrap({
 
     this.reset = () => {
       this.svg.transition().duration(750).call(zoom.translate([0, 0]).scale(1).event);
+      this.selected.forEach(s => this.selected.delete(s));
+      this.chart.selectAll(".blocks path").style("fill", "");
+      this.props.onSelectionChange(vis.export());
     };
 
     this.classed = (classes) => {
@@ -181,9 +184,9 @@ ${frequencyTip(d)}`)
         .domain([0, 1])
         .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
 
-    var lineScale = d3.scale.quantize()
-        .domain([0, 1])
-        .range(d3.range(9).map(function(i) { return 8 - i; }));
+    var lineScale = d3.scale.threshold()
+        .domain([1, 6, 11, 16, 31, 60])
+        .range(["#aaa", "#e64347", "#e65e43", "#e6a23c", "#edd351", "#badbaf", "#ebefc9"]);
 
     var congestionScale = d3.scale.sqrt()
         .domain([1, 100])
@@ -191,7 +194,7 @@ ${frequencyTip(d)}`)
 
     var line = d3.svg.line();
 
-    var varline = function (sw, ew, log = false) {
+    var varline = function (sw, ew) {
       return function(d) {
         var p = path(d);
         if (!p) {
@@ -225,9 +228,6 @@ ${frequencyTip(d)}`)
             dist += Math.sqrt(dx * dx + dy * dy);
           }
           var w = (dist / totalDist) * distDiff + sw;
-          if (log) {
-            console.log(dist, totalDist, w);
-          }
           top.push([d[i][0] + w * Math.cos(up), d[i][1] + w * Math.sin(up)]);
           bottom.push([d[i][0] + w * Math.cos(down), d[i][1] + w * Math.sin(down)]);
         }
@@ -283,20 +283,10 @@ ${frequencyTip(d)}`)
       let congestionPath = this.chart
         .append("g")
           .attr("class", "congestion-lines")
+          .style("opacity", 0.8)
         .selectAll("path")
           .data(subwayLinesCollection.features.filter(d => d.properties.LINE !== "GREEN"))
         .enter().append("path")
-        .on("mouseover", subwayTip.show)
-        .on("mouseout", subwayTip.hide);
-
-      let subwayPath = this.chart
-        .append("g")
-          .attr("class", "lines subway-lines")
-        .selectAll("path")
-          .data(subwayLinesCollection.features)
-        .enter().append("path")
-          .attr("d", path)
-          .style("stroke-width", 5)
         .on("mouseover", subwayTip.show)
         .on("mouseout", subwayTip.hide);
 
@@ -318,14 +308,27 @@ ${frequencyTip(d)}`)
           })
         .on("mouseout", busTip.hide)
 
+      let subwayPath = this.chart
+        .append("g")
+          .attr("class", "lines subway-lines")
+        .selectAll("path")
+          .data(subwayLinesCollection.features)
+        .enter().append("path")
+          .attr("d", path)
+          .style("stroke-width", 5)
+        .on("mouseover", subwayTip.show)
+        .on("mouseout", subwayTip.hide);
+
       this.updateLines = () => {
+        let busPath = this.chart.select(".bus-lines").selectAll("path")
+          .data(busLinesCollection.features.sort(
+            (a, b) => (b.properties[this.when] == 0 ? 1000 : b.properties[this.when]) - (a.properties[this.when] == 0 ? 1000 : a.properties[this.when])
+          ));
+
         if (this.svg.classed("frequency")) {
-          lineScale.domain(d3.extent(subwayLinesCollection.features.concat(busLinesCollection.features).map(d =>
-            d.properties[this.when]
-          ).filter(v => v !== 0)));
-          subwayPath.style("stroke", d => colorbrewer.Reds[9][lineScale(d.properties[this.when])]);
+          subwayPath.style("stroke", d => lineScale(d.properties[this.when]));
           busPath.style("stroke-dasharray", d => d.properties[this.when] === 0 ? "10,10" : "")
-          busPath.style("stroke", d => colorbrewer.Reds[9][lineScale(d.properties[this.when])]);
+          busPath.style("stroke", d => lineScale(d.properties[this.when]));
         } else {
           subwayPath.style("stroke", d => d.properties.LINE.toLowerCase());
           congestionPath.style("fill", d => LIGHT_COLORS[d.properties.LINE]);
@@ -333,13 +336,15 @@ ${frequencyTip(d)}`)
           congestionPath.style("stroke-width", 2);
           congestionPath.style("stroke-alignment", "inner");
           congestionPath.attr("d", d => {
-            let c = congestion[this.whenTime];
+            let c = d3.range(this.whenTime, this.whenTime + 10).map(t => congestion[t]);
             let [b, e] = d.properties.STATIONS.split(",");
             if (!b) b = "";
             if (!e) e = "";
             b = b.replace("Assembly", "Sullivan Square");
             e = e.replace("Assembly", "Sullivan Square");
-            return varline(congestionScale(c[b] || 1), congestionScale(c[e] || 1), b === "Davis" || e === "Davis")(d);
+            let cb = congestionScale(d3.mean(c.map(t => t[b] || 1)));
+            let ce = congestionScale(d3.mean(c.map(t => t[e] || 1)));
+            return varline(cb, ce)(d);
           })
           busPath.style("stroke", "purple");
           busPath.style("stroke-dasharray", "")

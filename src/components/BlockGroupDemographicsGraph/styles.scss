@@ -3,8 +3,12 @@
     fill: #778ea5;
   }
 
-  .axis {
-    font: 10px sans-serif;
+  .bar-other {
+    fill: #617b96;
+  }
+
+  .bar-highlighted {
+    fill: #444444;
   }
 
   .axis path,
@@ -14,7 +18,11 @@
     shape-rendering: crispEdges;
   }
 
-  .x.axis path {
-    display: none;
+  .axis text {
+    font-size: 11px;
+  }
+
+  .x-axis {
+    font-size: 10px;
   }
 }

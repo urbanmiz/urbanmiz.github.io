@@ -6,7 +6,7 @@ import DemandGraph from 'components/DemandGraph';
 import BudgetGraph from 'components/BudgetGraph';
 import BostonMap from 'components/BostonMap';
 import StopDistanceGraph from 'components/StopDistanceGraph';
-import NeighborhoodIncomeGraph from 'components/NeighborhoodIncomeGraph';
+import BlockGroupDemographicsGraph from 'components/BlockGroupDemographicsGraph';
 import BlockGroupComparison from 'components/BlockGroupComparison';
 import bostonPopulation from './bostonPopulation.json';
 import mbtaBudget from './mbtaBudget.json';
@@ -16,6 +16,7 @@ export class Nerds extends Component {
     super(props)
     this.state = {
       blockGroup: null,
+      demographicMetric: "med_inc",
       selection: [],
       when: 600
     }
@@ -28,6 +29,7 @@ export class Nerds extends Component {
   }
 
   handleMapReset = () => {
+    this.sliderChange(300);
     this.refs.map.reset();
   }
 
@@ -53,7 +55,19 @@ export class Nerds extends Component {
   }
 
   sliderChange = (v) => {
+    this.setState({ whenTime: v });
     this.refs.map.setWhenTime(v);
+  }
+
+  play = () => {
+    this.sliderChange(300);
+    let interval = setInterval(() => {
+      if (this.state.whenTime >= 1440) {
+        clearInterval(interval);
+        return;
+      }
+      this.sliderChange(this.state.whenTime + 5);
+    }, 10);
   }
 
   formatSlider = (v) => d3.time.format("%I:%M %p")(new Date(1970, 1, 1, v / 60, v % 60));
@@ -74,12 +88,13 @@ export class Nerds extends Component {
 
   renderCongestion = () => (
     <div style={{width: 400}}>
-      Display average weekday congestion at:
+      Display average weekday congestion at: <a onClick={this.play}>(animate)</a>
       <Slider
         min={300}
         max={1440}
         tipFormatter={this.formatSlider}
         marks={this.sliderMarks}
+        value={this.state.whenTime}
         defaultValue={360}
         onChange={this.sliderChange} />
     </div>
@@ -115,14 +130,33 @@ export class Nerds extends Component {
             stops within one mile.
           </p>
           <div className="chart-title">Stops within one mile</div>
-          <StopDistanceGraph data={this.state.nearbyStops} width={960} height={500} />
+          <StopDistanceGraph data={this.state.nearbyStops} width={700} height={500} />
           <p>
             Particularly useful is comparing this block group to other block
             groups in the neighborhood. The standard definition of "neighborhood"
             is used for Cambridge and Boston; for other municipalities, the city
             average is used instead.
           </p>
-          <NeighborhoodIncomeGraph width={700} height={500} blockGroup={this.state.selection[0].bid} />
+          <div className="chart-title">
+            Neighborhood demographic comparison
+          </div>
+          <div className="filters-simple">
+            <label>Visualize block groups by:&nbsp;
+              <select onChange={(e) => this.setState({ demographicMetric: e.currentTarget.value })}>
+                <option value="med_inc">Median income</option>
+                <option value="zero_veh">Zero vehicle households (%)</option>
+                <option value="transit_commute">Transit commuters (%)</option>
+                <option value="pop_density">Population density (per acre)</option>
+                <option value="college">College-aged population (%)</option>
+                <option value="seniors">Senior population (%)</option>
+              </select>
+            </label>
+          </div>
+          <BlockGroupDemographicsGraph
+            width={700} height={500}
+            data={[]}
+            blockGroup={this.state.selection[0].bid}
+            metric={this.state.demographicMetric} />
         </div>
       );
     }
@@ -232,7 +266,7 @@ export class Nerds extends Component {
                 <label><input name="what" onChange={(e) => this.setWhat("frequency")} type="radio" /> Frequency</label><br />
                 <label><input name="what" onChange={(e) => this.setWhat("congestion")} type="radio" /> Congestion (RBO only)</label>
               </div>
-              <BostonMap data={[]} width={960} height={720}
+              <BostonMap data={[]} width={960} height={620}
                 onHover={(blockGroup) => this.setState({blockGroup: blockGroup})}
                 onSelectionChange={this.setSelection}
                 ref="map" />
@@ -242,10 +276,10 @@ export class Nerds extends Component {
                 Visualize block groups by:&nbsp;
                 <select onChange={() => this.refs.map.quantize(this.refs.metric.value)} ref="metric">
                   <option value="">None</option>
-                  <option value="pop">Population density</option>
-                  <option value="transmod">Transit mode share</option>
-                  <option value="zero">Zero vehicle households</option>
                   <option value="income">Median income</option>
+                  <option value="zero">Zero vehicle households (%)</option>
+                  <option value="transmod">Transit commuters (%)</option>
+                  <option value="pop">Population density (per acre)</option>
                 </select>
               </div>
 
@@ -264,7 +298,7 @@ export class Nerds extends Component {
             <h1>Block group drilldown</h1>
             {this.state.selection.length === 1 ? this.renderDrilldown() : this.renderNoDrilldown()}
 
-            <h1>Compare neighborhoods</h1>
+            <h1>Compare block groups</h1>
             <p>
               How do different block groups stack up? What factors are high
               transit need associated with? Low income? A high number of

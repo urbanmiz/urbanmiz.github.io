@@ -33,6 +33,12 @@
     max-width: 960px;
   }
 
+  .filters-simple {
+    margin: 1em auto 0.2em;
+    max-width: 700px;
+    text-align: center;
+  }
+
   .map-container {
     margin: 0 auto;
     position: relative;
@@ -76,7 +82,7 @@
   }
 
   label {
-    font-weight: normal;
+    font-weight: 300;
     margin: 0;
 
     input[type=radio],
