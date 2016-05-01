@@ -1,4 +1,4 @@
-import d3Wrap from 'react-d3-wrap';
+import { D3Chart } from 'components/D3Chart';
 import d3tip from 'd3-tip';
 import topojson from 'topojson';
 
@@ -12,8 +12,14 @@ const LIGHT_COLORS = {
   ORANGE: "#ffd67f",
 }
 
-const BostonMap = d3Wrap({
-  initialize (svg, data, options) {
+export class BostonMap extends D3Chart {
+  constructor(props) {
+    super(props)
+
+    this.className = styles;
+  }
+
+  initialize (svg) {
     svg.classList.add(styles);
 
     this.quantize = (how) => {
@@ -61,9 +67,9 @@ const BostonMap = d3Wrap({
       }));
 
     this.shouldComponentUpdate = () => false;
-  },
+  }
 
-  update (svg, data, options) {
+  update (svg) {
     let vis = this;
 
     this.selected = new Set();
@@ -263,10 +269,6 @@ ${frequencyTip(d)}`)
       const subwayLinesCollection = topojson.feature(subwayLines, subwayLines.objects.subwayLines);
       const busLinesCollection = topojson.feature(busLines, busLines.objects.busLines);
 
-      console.log(subwayLinesCollection);
-      console.log(busLinesCollection);
-      console.log(congestion);
-
       this.chart
         .append("g")
           .attr("class", "blocks")
@@ -295,7 +297,6 @@ ${frequencyTip(d)}`)
         .selectAll("path")
           .data(busLinesCollection.features)
         .enter().append("path")
-          .attr("d", path)
           .style("stroke-width", 2)
         .on("mouseover", d => {
             let m = d3.mouse(svg);
@@ -322,7 +323,8 @@ ${frequencyTip(d)}`)
         let busPath = this.chart.select(".bus-lines").selectAll("path")
           .data(busLinesCollection.features.sort(
             (a, b) => (b.properties[this.when] == 0 ? 1000 : b.properties[this.when]) - (a.properties[this.when] == 0 ? 1000 : a.properties[this.when])
-          ));
+          ))
+          .attr("d", path);
 
         if (this.svg.classed("frequency")) {
           subwayPath.style("stroke", d => lineScale(d.properties[this.when]));
@@ -375,6 +377,4 @@ ${frequencyTip(d)}`)
           .on("click", () => zoomClick("out"));
     })
   }
-})
-
-export default BostonMap;
+}

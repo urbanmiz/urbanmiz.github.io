@@ -112,6 +112,7 @@
     "react-router": "^2.0.0-rc5",
     "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.1.4",
-    "topojson": "^1.6.24"
+    "topojson": "^1.6.24",
+    "whatwg-fetch": "^1.0.0"
   }
 }

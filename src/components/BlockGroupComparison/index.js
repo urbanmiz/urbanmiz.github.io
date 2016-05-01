@@ -1,18 +1,26 @@
-import d3Wrap from 'react-d3-wrap';
+import d3 from 'd3';
+import { D3Chart } from 'components/D3Chart';
 
 import { styles } from './styles.scss';
 
-const BlockGroupComparison = d3Wrap({
-  initialize (svg, data, options) {
-    svg.classList.add(styles);
-  },
+const margin = { top: 30, right: 10, bottom: 10, left: 10 };
 
-  update (svg, data, options) {
+class BlockGroupComparison extends D3Chart {
+  constructor(props) {
+    super(props);
+
+    this.className = styles;
+  }
+
+  initialize (svg) {
+    if (this.chart) {
+      this.chart.remove();
+    }
+
     var dimensions;
 
-    var margin = {top: 30, right: 10, bottom: 10, left: 10},
-        width = this.props.width - margin.left - margin.right,
-        height = this.props.height - margin.top - margin.bottom;
+    this.width = this.props.width - margin.left - margin.right,
+    this.height = this.props.height - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal().rangePoints([0, width], 1),
         y = {},
@@ -23,17 +31,11 @@ const BlockGroupComparison = d3Wrap({
         background,
         foreground;
 
-    if (this.svg) {
-      this.svg.remove();
-    }
-
-    var svg = d3.select(svg)
+    this.chart = d3.select(svg)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    this.svg = svg;
 
     // Extract the list of dimensions and create a scale for each.
     x.domain(dimensions = d3.keys(data[0]).filter(function(d) {
@@ -48,7 +50,7 @@ const BlockGroupComparison = d3Wrap({
     }));
 
     // Add grey background lines for context.
-    background = svg.append("g")
+    background = this.svg.append("g")
         .attr("class", "background")
       .selectAll("path")
         .data(data)
@@ -56,7 +58,7 @@ const BlockGroupComparison = d3Wrap({
         .attr("d", path);
 
     // Add blue foreground lines for focus.
-    foreground = svg.append("g")
+    foreground = this.svg.append("g")
         .attr("class", "foreground")
       .selectAll("path")
         .data(data)
@@ -64,7 +66,7 @@ const BlockGroupComparison = d3Wrap({
         .attr("d", path);
 
     // Add a group element for each dimension.
-    var g = svg.selectAll(".dimension")
+    var g = this.svg.selectAll(".dimension")
         .data(dimensions)
       .enter().append("g")
         .attr("class", "dimension")
@@ -142,6 +144,4 @@ const BlockGroupComparison = d3Wrap({
       });
     }
   }
-})
-
-export default BlockGroupComparison;
+}

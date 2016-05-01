@@ -1,14 +1,18 @@
-import d3Wrap from 'react-d3-wrap';
+import { D3Chart } from 'components/D3Chart';
 import d3tip from 'd3-tip';
+
+import bostonPopulation from './bostonPopulation.json';
 
 import { styles } from './styles.scss';
 
-const DemandGraph = d3Wrap({
-  initialize (svg, data, options) {
-    svg.classList.add(styles);
-  },
+export class DemandGraph extends D3Chart {
+  constructor(props) {
+    super(props);
 
-  update (svg, data, options) {
+    this.className = styles;
+  }
+
+  update (svg) {
     var margin = {top: 20, right: 60, bottom: 30, left: 70},
         width = this.props.width - margin.left - margin.right,
         height = this.props.height - margin.top - margin.bottom;
@@ -59,7 +63,7 @@ const DemandGraph = d3Wrap({
     }
     this.chart = chart;
 
-    data = data.map(d => ({
+    var data = bostonPopulation.map(d => ({
       year: parseDate(d.year.toString()),
       ridership: +d.ridership,
       population: +d.population
@@ -143,6 +147,4 @@ const DemandGraph = d3Wrap({
         .style("text-anchor", "end")
         .text("People");
   }
-})
-
-export default DemandGraph;
+};

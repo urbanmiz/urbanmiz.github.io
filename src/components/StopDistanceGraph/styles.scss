@@ -4,7 +4,7 @@
   }
 
   .axis {
-    font: 10px sans-serif;
+    font-size: 10px;
   }
 
   .axis path,
@@ -12,9 +12,5 @@
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
-  }
-
-  .x.axis path {
-    display: none;
   }
 }

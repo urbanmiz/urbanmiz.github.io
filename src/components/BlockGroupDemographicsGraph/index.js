@@ -1,4 +1,4 @@
-import d3Wrap from 'react-d3-wrap';
+import { D3Chart } from 'components/D3Chart';
 import d3tip from 'd3-tip';
 import { queue } from 'd3-queue';
 
@@ -26,7 +26,7 @@ function coerceDatum(d) {
   });
 }
 
-const NeighborhoodIncomeGraph = d3Wrap({
+export class NeighborhoodIncomeGraph extends D3Chart {
   initialize (svg, data, options) {
     svg.classList.add(styles);
 
@@ -286,11 +286,9 @@ const NeighborhoodIncomeGraph = d3Wrap({
         }
         this.updateVisualization();
       });
-  },
+  }
 
   update (svg, data, options) {
     this.updateVisualization();
   }
-});
-
-export default NeighborhoodIncomeGraph;
+}

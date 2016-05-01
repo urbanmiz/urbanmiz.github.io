@@ -1,14 +1,18 @@
-import d3Wrap from 'react-d3-wrap';
 import d3tip from 'd3-tip';
+import { D3Chart } from 'components/D3Chart';
 
 import { styles } from './styles.scss';
 
 const margin = { top: 20, right: 20, bottom: 160, left: 40 };
 
-const StopDistanceGraph = d3Wrap({
-  initialize (svg, data, options) {
-    svg.classList.add(styles);
+export class StopDistanceGraph extends D3Chart {
+  constructor(props) {
+    super(props);
 
+    this.className = styles;
+  }
+
+  initialize (svg) {
     this.width = this.props.width - margin.left - margin.right;
     this.height = this.props.height - margin.top - margin.bottom;
 
@@ -48,17 +52,17 @@ const StopDistanceGraph = d3Wrap({
         .text("Distance (miles)");
 
     this.chart.selectAll(".bar")
-        .data(data)
+        .data(this.props.data)
       .enter().append("rect")
         .attr("class", "bar")
-  },
+  }
 
-  update (svg, data, options) {
-    while (data.length < 15) {
-      data.push({ name: " ".repeat(data.length), distance: 0 });
+  update (svg) {
+    while (this.props.data.length < 15) {
+      this.props.data.push({ name: " ".repeat(this.props.data.length), distance: 0 });
     }
 
-    this.x.domain(data.map(d => d.name));
+    this.x.domain(this.props.data.map(d => d.name));
 
     this.chart.select(".x.axis")
         .call(this.xAxis)
@@ -70,12 +74,10 @@ const StopDistanceGraph = d3Wrap({
         .style("text-anchor", "end");
 
     this.chart.selectAll(".bar")
-        .data(data)
+        .data(this.props.data)
         .attr("x", d => this.x(d.name))
         .attr("width", this.x.rangeBand())
         .attr("y", d => this.y(d.distance))
         .attr("height", d => this.height - this.y(d.distance));
   }
-})
-
-export default StopDistanceGraph;
+}
