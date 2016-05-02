@@ -26,7 +26,7 @@ function coerceDatum(d) {
   });
 }
 
-export class NeighborhoodIncomeGraph extends D3Chart {
+export class BlockGroupDemographicsGraph extends D3Chart {
   initialize (svg, data, options) {
     svg.classList.add(styles);
 

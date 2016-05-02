@@ -5,7 +5,7 @@ import { styles } from './styles.scss';
 
 const margin = { top: 30, right: 10, bottom: 10, left: 10 };
 
-class BlockGroupComparison extends D3Chart {
+export class BlockGroupComparison extends D3Chart {
   constructor(props) {
     super(props);
 
