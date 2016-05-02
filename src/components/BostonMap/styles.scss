@@ -1,6 +1,24 @@
 :local(.styles) {
   border: 1px solid #000;
 
+  .freq0 { fill: #aaa }
+  .freq1 { fill: #e64347 }
+  .freq2 { fill: #e65e43 }
+  .freq3 { fill: #e6a23c }
+  .freq4 { fill: #edd351 }
+  .freq5 { fill:#badbaf }
+  .freq6 { fill: #ebefc9 }
+
+  .q0-9 { fill: rgb(252,251,253) }
+  .q1-9 { fill: rgb(239,237,245) }
+  .q2-9 { fill: rgb(218,218,235) }
+  .q3-9 { fill: rgb(188,189,220) }
+  .q4-9 { fill: rgb(158,154,200) }
+  .q5-9 { fill: rgb(128,125,186) }
+  .q6-9 { fill: rgb(106,81,163) }
+  .q7-9 { fill: rgb(84,39,143) }
+  .q8-9 { fill: rgb(63,0,125) }
+
   .blocks path {
     fill: #fff;
     stroke: #ccc;
@@ -8,15 +26,15 @@
     pointer-events: all;
     cursor: pointer;
 
-    &.q0-9{fill:rgb(252,251,253)}
-    &.q1-9{fill:rgb(239,237,245)}
-    &.q2-9{fill:rgb(218,218,235)}
-    &.q3-9{fill:rgb(188,189,220)}
-    &.q4-9{fill:rgb(158,154,200)}
-    &.q5-9{fill:rgb(128,125,186)}
-    &.q6-9{fill:rgb(106,81,163)}
-    &.q7-9{fill:rgb(84,39,143)}
-    &.q8-9{fill:rgb(63,0,125)}
+    &.q0-9 { fill: rgb(252,251,253) }
+    &.q1-9 { fill: rgb(239,237,245) }
+    &.q2-9 { fill: rgb(218,218,235) }
+    &.q3-9 { fill: rgb(188,189,220) }
+    &.q4-9 { fill: rgb(158,154,200) }
+    &.q5-9 { fill: rgb(128,125,186) }
+    &.q6-9 { fill: rgb(106,81,163) }
+    &.q7-9 { fill: rgb(84,39,143) }
+    &.q8-9 { fill: rgb(63,0,125) }
 
     &:hover {
       fill: #aaa;
@@ -64,4 +82,28 @@
 
 .congestion .congestion-lines {
   display: block;
+}
+
+.frequency-legend {
+  visibility: hidden;
+}
+
+.frequency .frequency-legend {
+  visibility: visible;
+}
+
+.legend {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 9px;
+}
+
+.legend-title {
+  font-size: 11px;
+}
+
+.legend-background {
+  fill: #fff;
+  stroke-width: 1;
+  stroke: #999;
+  opacity: 0.8;
 }

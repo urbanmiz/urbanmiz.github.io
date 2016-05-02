@@ -27,7 +27,7 @@ export class BostonMap extends D3Chart {
 
         this.currentMetric = (d) => {
           if (how === "pop") {
-            return d.TOT_POP / d.ALAND;
+            return d.TOT_POP / (d.ALAND * 0.00002295684);
           } else if (how === "transmod") {
             return d.TRANSIT / d.TOT_WKRS;
           } else if (how === "zero") {
@@ -127,6 +127,31 @@ export class BostonMap extends D3Chart {
       }
 
       vis.props.onSelectionChange(vis.export());
+    }
+
+    let frequencyLegendRowFormatter = (d, i) => {
+      if (i === 0) {
+        return "No service"
+      }
+      else if (i === 6) {
+        return "60 min or greater";
+      }
+      else {
+        let extent = lineScale.invertExtent(d);
+        return `${extent[0]} min - ${extent[1] - 1} min`;
+      }
+    }
+
+    let blockLegendRowFormatter = (d, i) => {
+      let extent = scale.invertExtent(d);
+      if (this.how === "income" || this.how === "pop") {
+        let format = d3.format(",");
+        return format(d3.round(+extent[0],0)) + " - " + format(d3.round(+extent[1],0));
+      }
+      else if (this.how === "transmod" || this.how === "zero") {
+        let format = d3.format(",%");
+        return format(+extent[0]) + " - " + format(+extent[1]);
+      }
     }
 
     var blockGroupTip = d3tip()
@@ -319,6 +344,46 @@ ${frequencyTip(d)}`)
         .on("mouseover", subwayTip.show)
         .on("mouseout", subwayTip.hide);
 
+
+      // Legend for frequency lines.
+      let frequencyLegend = this.svg.append("g")
+          .attr("class", "legend frequency-legend");
+
+      let frequencyBackground = frequencyLegend.append("rect");
+
+      frequencyLegend.append("text")
+        .attr("class", "legend-title")
+        .attr("x", this.props.width - 120)
+        .attr("y", 70)
+        .text("Service frequency");
+
+      let frequencyLegendRows = frequencyLegend
+        .selectAll("g")
+          .data(lineScale.range())
+        .enter()
+          .append("g");
+
+      frequencyLegendRows.append("rect")
+          .attr("x", this.props.width - 120)
+          .attr("y", (d, i) => 85 + i * 20)
+          .attr("width", 20)
+          .attr("height", 3)
+          .attr("class", (d, i) => "freq" + i);
+
+      frequencyLegendRows.append("text")
+        .attr("x", this.props.width - 95)
+        .attr("y", (d, i) => 85 + i * 20)
+        .attr("dy", "0.55em") // Place text one line *below* the (x, y) point.
+        .text(frequencyLegendRowFormatter);
+
+      let frequencyBBox = frequencyLegend.node().getBBox();
+      frequencyBackground
+          .attr("class", "legend-background")
+          .attr("x", frequencyBBox.x - 10)
+          .attr("y", frequencyBBox.y - 10)
+          .attr("width", frequencyBBox.width + 20)
+          .attr("height", frequencyBBox.height + 20)
+
       this.updateLines = () => {
         let busPath = this.chart.select(".bus-lines").selectAll("path")
           .data(busLinesCollection.features.sort(
@@ -330,7 +395,9 @@ ${frequencyTip(d)}`)
           subwayPath.style("stroke", d => lineScale(d.properties[this.when]));
           busPath.style("stroke-dasharray", d => d.properties[this.when] === 0 ? "10,10" : "")
           busPath.style("stroke", d => lineScale(d.properties[this.when]));
-        } else {
+        }
+
+        else {
           subwayPath.style("stroke", d => d.properties.LINE.toLowerCase());
           congestionPath.style("fill", d => LIGHT_COLORS[d.properties.LINE]);
           congestionPath.style("stroke", d => LIGHT_COLORS[d.properties.LINE]);
@@ -360,7 +427,49 @@ ${frequencyTip(d)}`)
 
         this.chart.selectAll(".blocks path")
           .attr("class", d => this.how ? scale(this.currentMetric(d.properties)) : "");
+
+        // Delete old block group legends.
+        if (this.blockLegend) {
+          this.blockLegend.remove();
+        }
+
+        // Add block group legend.
+        if (vis.how) {
+          this.blockLegend = this.svg.append("g")
+              .attr("class", "legend block-legend")
+
+          let blockLegendBackground = this.blockLegend.append("rect");
+
+          let blockLegendRows = this.blockLegend.selectAll("g")
+              .data(scale.range())
+            .enter()
+              .append("g");
+
+          blockLegendRows
+              .append("rect")
+              .attr("x", 30)
+              .attr("y", (d, i) => 220 + i * 20)
+              .attr("width", 10)
+              .attr("height", 10)
+              .attr("class", (d, i) => `q${i}-9`);
+
+          blockLegendRows
+              .append("text")
+              .attr("x", 45)
+              .attr("y", (d, i) => 220 + i * 20)
+              .attr("dy", "0.8em") // Place text one line *below* the (x, y) point.
+              .text(blockLegendRowFormatter);
+
+          let blockLegendBBox = this.blockLegend.node().getBBox();
+          blockLegendBackground
+              .attr("class", "legend-background")
+              .attr("x", blockLegendBBox.x - 10)
+              .attr("y", blockLegendBBox.y - 10)
+              .attr("width", blockLegendBBox.width + 20)
+              .attr("height", blockLegendBBox.height + 20)
+        }
       };
+
 
       this.svg.append("text")
           .attr("class", "zoom-button")
@@ -375,6 +484,7 @@ ${frequencyTip(d)}`)
           .attr("dy", "2.4em")
           .text("\uE016")
           .on("click", () => zoomClick("out"));
+
     })
   }
 }
