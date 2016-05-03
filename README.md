@@ -1,6 +1,6 @@
 ## Final project grading notes
 
-Attention grader: see README.pdf. This README is for developers.
+Attention grader: see submit/README.pdf. This README is for developers.
 
 
 ## Development
