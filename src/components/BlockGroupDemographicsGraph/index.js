@@ -170,6 +170,10 @@ export class BlockGroupDemographicsGraph extends D3Chart {
           d3.selectAll("rect.bar-other").transition().attr("height", 0).attr("y", height).remove();
           //DEMOGRAPHICS charts
 
+        //remove any legend texts if they already exist.
+      d3.selectAll("#legend-text").remove();
+      d3.selectAll("#legend-rect").remove();
+
           //enter
           var bars = svg.selectAll(".bar")
             .data(data, d => d.NAME_E ? "Selected block group" : d.Place);
@@ -281,6 +285,44 @@ export class BlockGroupDemographicsGraph extends D3Chart {
                   return height - y(d.Min_of_MED_INC);
                 }
               });
+
+      // LEGENDS showing mins and max incomes
+      var minmax = d3.scale.ordinal()
+        .domain(["min", "max"])
+        .range(["#778ea5", "#617b96"]);
+
+      var legend = svg.selectAll("g.legendEntry")
+        .data(minmax.range())
+        .enter()
+        .append("g");
+
+      legend.append("rect")
+      .attr("id", "legend-rect")
+      .attr("x", width - 100)
+      .attr("y", function(d,i) { return -30 + i * 20})
+      .attr("width", 10)
+      .attr("height", 10)
+      .attr("class", function(d, i) {return "minmax"+i});
+
+      legend.append("text")
+      .attr("id", "legend-text")
+      .attr("x", width - 80)
+      .attr("y", function(d, i) {
+         return -30 + i * 20;
+      })
+      .attr("dy", "0.8em") //place text one line *below* the x,y point
+      .text(function(d, i){
+        if(i === 0){
+          return 'Highest Income BG in Area';
+        }
+        else if(i === 1){
+          return 'Lowest Income BG in Area';
+        }
+      });
+
+    // LEGENDS END
+
+
 
           }
         }
