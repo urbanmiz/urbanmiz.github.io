@@ -160,7 +160,7 @@ export class Nerds extends Component {
         Residents and visitors of this block group have these transit
         stops within one mile.
       </p>
-      <div className="chart-title">Stops within one mile</div>
+      <div className="chart-title">Stops Within One Mile</div>
       {this.renderNearbyStops()}
 
       <p>
@@ -170,7 +170,7 @@ export class Nerds extends Component {
         average is used instead.
       </p>
       <div className="chart-title">
-        Neighborhood demographic comparison
+        Neighborhood Demographic Comparison
       </div>
       <div className="filters-simple">
         <label>Visualize block groups by:&nbsp;
@@ -232,7 +232,7 @@ export class Nerds extends Component {
       <section>
         <div className="container">
           <div className="row">
-            <h1>Why should I care about public transit?</h1>
+            <h1>Why Should I Care About Public Transit?</h1>
 
             <p>
               The Massachusetts Bay Transportation Authority (MBTA) is quickly
@@ -246,7 +246,7 @@ export class Nerds extends Component {
 
             <p>
               In the graph above, the population line is the sum of the
-              population estimates for Boston, Somerville, and Newton, as
+              population estimates for Suffolk (Boston, Revere), Middlesex (Cambridge, Somerville, Newton), and Norfolk (Brookline and South Shore) Counties, as
               compiled by the US Census Bureau. These are the three
               municipalities served by the MBTA's rapid transit lines for which
               data is readily available. The ridership line is the average
@@ -263,7 +263,7 @@ export class Nerds extends Component {
               the MBTA since 1990.
             </p>
 
-            <div className="chart-title">MBTA revenue and expenses over time</div>
+            <div className="chart-title">MBTA Revenue and Expenses Over Time</div>
             <BudgetGraph width={960} height={500} />
 
             <p>
@@ -275,7 +275,7 @@ export class Nerds extends Component {
             </p>
 
             <div className="callout">
-              <h2>Sobering facts about the MBTA</h2>
+              <h2>Sobering Facts About the MBTA</h2>
               <ol className="callout-list">
                 <li>
                   40% of the MBTA's vehicles were built before 1980.
@@ -297,7 +297,7 @@ export class Nerds extends Component {
             </div>
 
             <p>
-              <a href="http://www.nctr.usf.edu/pdf/77607.pdf">Research suggests</a>
+              <a href="http://www.nctr.usf.edu/pdf/77607.pdf">Research suggests</a>&nbsp;
               that improving service relability and coverage is necessary to
               increase ridership. When public transit ridership increases,&nbsp;
               <a href="http://www.apta.com/mediacenter/ptbenefits/Pages/default.aspx">
@@ -307,7 +307,7 @@ export class Nerds extends Component {
               stimulate economic growth along new transit corridors.
             </p>
 
-            <h2>Needs and Opportunities for Transit in Boston: Two Neighborhood Profiles</h2>
+            <h2>Needs and Opportunities for Transit in Boston:<br />Two Neighborhood Profiles</h2>
 
             <p>
               Boston ranks as the third highest percentage of zero car
@@ -403,7 +403,7 @@ export class Nerds extends Component {
               comparatively low levels of transit service in the past.
             </p>
 
-            <h2>The Visualization </h2>
+            <h2>The Visualization</h2>
 
             <p>
               We present below an interactive visualization of the Greater
@@ -463,10 +463,10 @@ export class Nerds extends Component {
 
         <div className="container">
           <div className="row">
-            <h1>Block group drilldown</h1>
+            <h1>Block Group Drilldown</h1>
             {this.showDrilldown() ? this.renderDrilldown() : this.renderNoDrilldown()}
 
-            <h1>Compare block groups</h1>
+            <h1>Compare Block Groups</h1>
             <p>
               How do different block groups stack up? What factors are high
               transit need associated with? Low income? A high number of

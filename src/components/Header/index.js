@@ -18,11 +18,11 @@ export class Header extends Component {
 
             <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
               <nav>
-                <Link to="/incoming" activeClassName="active">
-                  Incoming residents
-                </Link>
                 <Link to="/nerds" activeClassName="active">
                   Transit planners
+                </Link>
+                <Link to="/incoming" activeClassName="active">
+                  Incoming residents
                 </Link>
               </nav>
             </div>

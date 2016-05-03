@@ -1,7 +1,6 @@
-## Prototype V2 Grading note
+## Final project grading notes
 
-Ignore the below instructions—simply open index.html in your browser,
-and you'll be good to go.
+Attention grader: see README.pdf. This README is for developers.
 
 
 ## Development
