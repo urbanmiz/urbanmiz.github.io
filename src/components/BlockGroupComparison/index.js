@@ -12,7 +12,7 @@ export class BlockGroupComparison extends D3Chart {
     this.className = styles;
   }
 
-  initialize (svg) {
+  update (svg) {
     if (this.chart) {
       this.chart.remove();
     }
