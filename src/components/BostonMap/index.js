@@ -141,18 +141,6 @@ export class BostonMap extends D3Chart {
       }
     }
 
-    let blockLegendRowFormatter = (d, i) => {
-      let extent = scale.invertExtent(d);
-      if (this.how === "income" || this.how === "pop") {
-        let format = d3.format(",");
-        return format(d3.round(+extent[0],0)) + " - " + format(d3.round(+extent[1],0));
-      }
-      else if (this.how === "transmod" || this.how === "zero") {
-        let format = d3.format(",%");
-        return format(+extent[0]) + " - " + format(+extent[1]);
-      }
-    }
-
     var blockGroupTip = d3tip()
       .attr("class", "d3-tip")
       .html(d => `
@@ -169,15 +157,16 @@ Zero vehicle households: ${d.properties.ZERO_VEH} (${d3.format(".1p")(d.properti
 </div>
 `);
 
+    let formatFrequency = (n) => n ? `${n} minutes` : `N/A`
+
     let frequencyTip = d =>
 `<table>
- <tr><td>Morning</td><td>${d.properties.AM} minutes</td></tr>
- <tr><td>Morning rush hour</td><td>${d.properties.AM_Peak} minutes</td></tr>
- <tr><td>Afternoon</td><td>${d.properties.PM} minutes</td></tr>
- ${d.properties.PM_Peak ? "<tr><td>Evening rush hour</td><td>" + d.properties.PM_Peak + " minutes</td></tr>" : ""}
- <tr><td>Night</td><td>${d.properties.Eve} minutes</td></tr>
- <tr><td>Saturday peak</td><td>${d.properties.Sat_Pk} minutes</td></tr>
- <tr><td>Sunday peak</td><td>${d.properties.Sun_Pk} minutes</td></tr>
+ <tr><td>Morning</td><td>${formatFrequency(d.properties.AM)}</td></tr>
+ <tr><td>Rush hour</td><td>${formatFrequency(d.properties.AM_Peak)}</td></tr>
+ <tr><td>Afternoon</td><td>${formatFrequency(d.properties.PM)}</td></tr>
+ <tr><td>Night</td><td>${formatFrequency(d.properties.Eve)}</td></tr>
+ <tr><td>Saturday peak</td><td>${formatFrequency(d.properties.Sat_Pk)}</td></tr>
+ <tr><td>Sunday peak</td><td>${formatFrequency(d.properties.Sun_Pk)}</td></tr>
  </table>`
 
     var subwayTip = d3tip()
@@ -209,13 +198,17 @@ ${frequencyTip(d)}`)
         .center([this.props.width / 2, this.props.height / 2])
         .on("zoom", zoomed);
 
-    var scale = d3.scale.quantize()
+    var quantizeScale = d3.scale.quantize()
         .domain([0, 1])
         .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
 
     var lineScale = d3.scale.threshold()
         .domain([1, 6, 11, 16, 31, 60])
         .range(["#aaa", "#e64347", "#e65e43", "#e6a23c", "#edd351", "#badbaf", "#ebefc9"]);
+
+    var populationDensityScale = d3.scale.threshold()
+        .domain([61, 140, 242, 361, 514, 738, 1070, 1882, 3404])
+        .range(["q0-9", "q1-9", "q2-9", "q3-9", "q4-9", "q5-9", "q6-9", "q7-9", "q8-9"]);
 
     var congestionScale = d3.scale.sqrt()
         .domain([1, 100])
@@ -420,9 +413,13 @@ ${frequencyTip(d)}`)
       this.updateLines();
 
       this.updateScale = () => {
-        scale.domain(d3.extent(featureCollection.features.map(d =>
-          this.currentMetric(d.properties)
-        )));
+        let scale = (vis.how === "pop" ? populationDensityScale : quantizeScale);
+
+        if (vis.how !== "pop") {
+          scale.domain(d3.extent(featureCollection.features.map(d =>
+            this.currentMetric(d.properties)
+          )));
+        }
 
         this.chart.selectAll(".blocks path")
           .attr("class", d => this.how ? scale(this.currentMetric(d.properties)) : "");
@@ -457,7 +454,17 @@ ${frequencyTip(d)}`)
               .attr("x", 45)
               .attr("y", (d, i) => 220 + i * 20)
               .attr("dy", "0.8em") // Place text one line *below* the (x, y) point.
-              .text(blockLegendRowFormatter);
+              .text((d, i) => {
+                let extent = scale.invertExtent(d);
+                if (this.how === "income" || this.how === "pop") {
+                  let format = d3.format(",");
+                  return format((isNaN(extent[0]) ? 0 : d3.round(+extent[0],0))) + " - " + format(d3.round(+extent[1],0));
+                }
+                else if (this.how === "transmod" || this.how === "zero") {
+                  let format = d3.format(",%");
+                  return format(+extent[0]) + " - " + format(+extent[1]);
+                }
+              });
 
           let blockLegendBBox = this.blockLegend.node().getBBox();
           blockLegendBackground

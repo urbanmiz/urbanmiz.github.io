@@ -11,6 +11,10 @@ import { StopDistanceGraph } from 'components/StopDistanceGraph';
 import { BlockGroupDemographicsGraph } from 'components/BlockGroupDemographicsGraph';
 import { BlockGroupComparison } from 'components/BlockGroupComparison';
 
+// Images
+import roxburyDorchesterChart from './Roxbury_Dorchester.jpg';
+import somervilleChart from './Somerville.jpg';
+
 const CONGESTION_SLIDER_DEFAULT = 360; /* 6am */
 
 const formatCongestionSlider = (v) => {
@@ -104,7 +108,7 @@ export class Nerds extends Component {
       Display frequency during:&nbsp;
       <select onChange={(e) => this.refs.map.setWhen(e.currentTarget.value)}>
         <option value="AM">Morning</option>
-        <option value="AM_Peak">Morning rush hour</option>
+        <option value="AM_Peak">Rush hour</option>
         <option value="PM">Afternoon</option>
         <option value="Eve">Night</option>
         <option value="Sat_Pk">Saturday peak</option>
@@ -303,6 +307,104 @@ export class Nerds extends Component {
               stimulate economic growth along new transit corridors.
             </p>
 
+            <h2>Needs and Opportunities for Transit in Boston: Two Neighborhood Profiles</h2>
+
+            <p>
+              Boston ranks as the third highest percentage of zero car
+              households, which at 37% is only behind New York City and
+              Washington, DC. The city as well as the surrounding area
+              also has even higher commute to work by transit showing that
+              households with car still choose to use transit because of
+              its convenience.
+            </p>
+
+            <p>
+              Comparing the frequency of service to the underlying Census
+              data starts to reveal areas that are lacking in service.
+              Although coverage is comprehensive during the peak periods,
+              where most bus and rail services come at 15 minute
+              frequencies or less, the service during the midday and
+              weekends is more lacking. For areas with high number of
+              car-free households implies that public transit is used for
+              uses beyond just the home-to-work, which is a strong
+              argument for robust service throughout the entire day. In
+              addition, the definition of the commute period is evolving
+              with fewer strict 9-5 jobs. As such, more passengers are
+              traveling beyond the peak periods.
+            </p>
+
+            <p>
+              The use of the visualization begins to show where service is
+              lacking. Two particular areas are particularly lacking in
+              service during the midday and weekend services, but have
+              high transit need based on its demographic data.
+            </p>
+
+            <h3>Roxbury and Dorchester </h3>
+
+            <img src={roxburyDorchesterChart} width={960} />
+
+            <p>
+              Roxbury has had a long history of disappointments in transit
+              and consequently a great deal of mistrust in transportation
+              planners. The use of eminent domain for a major expansion of
+              the Interstate Highway system left scars on the area, and
+              although the highway was ultimately cancelled, there still
+              remain empty parcels of buildings that were demolished. The
+              re-alignment of the Orange Line from Washington Street to
+              the Southwest Corridor left Dudley Square and many parts of
+              Roxbury no longer in short walking distance to a rapid
+              transit line. Although the re-aligned Orange Line brought
+              service to new areas such as Jamaica Plains and Fenway,
+              Roxbury never received a rail replacement as initially
+              promised. Instead, the Silver Line provides service to
+              Dudley Square.
+            </p>
+
+            <p>
+              In the eastern parts of Roxbury and Dorchester near
+              JFK/UMass, there are high number of households without a
+              vehicle, however frequent service is only available on
+              Warren Street, leaving a service area gap between Warren
+              Street and the Red Line in eastern Dorchester. Service
+              frequency drops to above 30 minutes on many of the lines,
+              especially in the evening and on Sunday.
+            </p>
+
+            <h3>Winter Hill, Somerville </h3>
+
+            <img src={somervilleChart} width={960} />
+
+            <p>
+              Somerville has been experiencing strong economic growth in
+              the last decade and has been attracting new residents to the
+              city. Under Mayor Joe Curtatone’s data-driven management
+              approach, the city has been able to tackle urban issues.
+              More people are finding Somerville as an attractive place to
+              live, work, and play, and consequently the number of young
+              professionals in the area has grown significantly. The City
+              hopes to increase the number of non-auto trips by 50%.
+            </p>
+
+            <p>
+              However many areas despite lower car ownership rates and
+              high proportions of work trips done by transit are lacking
+              the frequency of service to achieve these goals. Even at
+              rush hour many of the bus lines only operate at 20 minute
+              frequencies, and during the off-peak hours, one can expect
+              to wait more than 30 minutes for a bus to arrive.
+            </p>
+
+            <p>
+              There is hope that better transit will soon arrive. The
+              Green Line extension will connect Union Square to Downtown
+              Boston, and after via Winter Hill to Tufts University. This
+              would provide service in areas that have had marginal
+              comparatively low levels of transit service in the past.
+            </p>
+
+            <h2>The Visualization </h2>
+
             <p>
               We present below an interactive visualization of the Greater
               Boston area and the MBTA transit network that serves its
@@ -323,7 +425,7 @@ export class Nerds extends Component {
 
         <div className="container">
           <div className="row">
-            <h1>Transit need by neighborhoods</h1>
+            <h1>Transit Need by Neighborhoods</h1>
             <div className="map-container">
               <div className="map-visualize">
                 <h4>Visualize</h4>

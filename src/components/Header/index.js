@@ -29,10 +29,10 @@ export class Header extends Component {
 
             <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs text-right">
               <nav>
-                <Link to="/data" activeClassName="active">
+                <a href="https://www.dropbox.com/sh/w6yxd2bjfv1lh1s/AAAQZ-RFJulFg8pT_7S9HEJOa?dl=0" target="_blank">
                   Data
-                </Link>
-                <a href="https://docs.google.com/" target="_blank">
+                </a>
+                <a href="https://docs.google.com/document/d/1bJkTGbH9HWG1FmzOGy-6Cx5pBuIyvOx1dSa1qoZxeRA" target="_blank">
                   Process book
                 </a>
                 <a href="https://github.com/urbanmiz/urbanmiz.github.io" target="_blank">
