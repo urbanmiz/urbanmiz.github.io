@@ -241,7 +241,7 @@ export class Nerds extends Component {
               outpaced the increase in population in the Boston area.
             </p>
 
-            <div className="chart-title">MBTA ridership and Boston area population over time</div>
+            <div className="chart-title">MBTA Ridership and Boston Area Population Over Time</div>
             <DemandGraph width={960} height={500} />
 
             <p>
