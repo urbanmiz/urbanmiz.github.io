@@ -65,7 +65,7 @@ const StepOneMap = React.createClass({
                         Right-click to add a location for your workplace.</h4>
                 </div>
                 <div
-                    style={{width: '100%', display: 'flex', flexFlow: 'row nowrap', justifyContent: 'center',  padding:0}}>
+                    style={{height: 350, width: '100%', display: 'flex', flexFlow: 'row nowrap', justifyContent: 'center',  padding:0}}>
 
 
                     <br />

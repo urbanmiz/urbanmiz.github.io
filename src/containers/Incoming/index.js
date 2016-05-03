@@ -7,7 +7,7 @@ export class Incoming extends Component {
       <section>
         <div className="container">
           <div className="row">
-            <div style={{marginLeft: 'auto', marginRight: 'auto',width: '85%', textAlign: 'center', height: 350}}>
+            <div style={{marginLeft: 'auto', marginRight: 'auto',width: '85%', textAlign: 'center'}}>
                 <StepOneMap />
             </div>
           </div>
