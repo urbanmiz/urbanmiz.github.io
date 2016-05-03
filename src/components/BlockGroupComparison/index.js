@@ -22,9 +22,10 @@ export class BlockGroupComparison extends D3Chart {
     this.width = this.props.width - margin.left - margin.right,
     this.height = this.props.height - margin.top - margin.bottom;
 
-    var x = d3.scale.ordinal().rangePoints([0, width], 1),
+    var x = d3.scale.ordinal().rangePoints([0, this.width], 1),
         y = {},
-        dragging = {};
+        dragging = {},
+        data = this.props.data;
 
     var line = d3.svg.line(),
         axis = d3.svg.axis().orient("left"),
@@ -32,25 +33,25 @@ export class BlockGroupComparison extends D3Chart {
         foreground;
 
     this.chart = d3.select(svg)
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", this.width + margin.left + margin.right)
+        .attr("height", this.height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // Extract the list of dimensions and create a scale for each.
-    x.domain(dimensions = d3.keys(data[0]).filter(function(d) {
+    x.domain(dimensions = d3.keys(data[0]).filter(d => {
       return /^[A-Z]/.test(d) && (y[d] = (typeof(data[0][d]) === "string" ?
         (d3.scale.ordinal()
           .domain(data.map(p => p[d]))
-          .rangePoints([height, 0], .1))
+          .rangePoints([this.height, 0], .1))
         :
         (d3.scale.linear()
           .domain(d3.extent(data, function(p) { return +p[d]; }))
-          .range([height, 0]))));
+          .range([this.height, 0]))));
     }));
 
     // Add grey background lines for context.
-    background = this.svg.append("g")
+    background = this.chart.append("g")
         .attr("class", "background")
       .selectAll("path")
         .data(data)
@@ -58,7 +59,7 @@ export class BlockGroupComparison extends D3Chart {
         .attr("d", path);
 
     // Add blue foreground lines for focus.
-    foreground = this.svg.append("g")
+    foreground = this.chart.append("g")
         .attr("class", "foreground")
       .selectAll("path")
         .data(data)
@@ -66,7 +67,7 @@ export class BlockGroupComparison extends D3Chart {
         .attr("d", path);
 
     // Add a group element for each dimension.
-    var g = this.svg.selectAll(".dimension")
+    var g = this.chart.selectAll(".dimension")
         .data(dimensions)
       .enter().append("g")
         .attr("class", "dimension")
@@ -77,8 +78,8 @@ export class BlockGroupComparison extends D3Chart {
             dragging[d] = x(d);
             background.attr("visibility", "hidden");
           })
-          .on("drag", function(d) {
-            dragging[d] = Math.min(width, Math.max(0, d3.event.x));
+          .on("drag", d => {
+            dragging[d] = Math.min(this.width, Math.max(0, d3.event.x));
             foreground.attr("d", path);
             dimensions.sort(function(a, b) { return position(a) - position(b); });
             x.domain(dimensions);

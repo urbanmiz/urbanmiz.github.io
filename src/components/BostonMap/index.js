@@ -54,11 +54,10 @@ export class BostonMap extends D3Chart {
 
     this.export = () =>
       Array.from(this.selected).map(d => ({
-        "ID": d.TARGET_FID,
-        "Population": d.TOT_POP,
-        "Households": d.TOT_HSHD,
-        "Transit mode share": d.TRANSIT,
-        "Zero vehicle households": d.ZERO_VEH,
+        "Population per acre": d.TOT_POP / (d.ALAND * 0.00002295684),
+        "Households per acre": d.TOT_HSHD / (d.ALAND * 0.00002295684),
+        "Transit mode share (%)": (d.TRANSIT / d.TOT_WKRS) * 100,
+        "Zero vehicle households (%)": (d.ZERO_VEH / d.TOT_HSHD) * 100,
         "Median income": d.MED_INC,
         "City": d.TOWN,
         lat: +d.INTPTLAT,
