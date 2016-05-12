@@ -435,13 +435,13 @@ export class Nerds extends Component {
                 <label><input name="what" onChange={(e) => this.setWhat("frequency")} type="radio" /> Frequency</label><br />
                 <label><input name="what" onChange={(e) => this.setWhat("congestion")} type="radio" /> Congestion (RBO only)</label>
               </div>
-              <BostonMap data={[]} width={960} height={620}
+              <BostonMap data={[]} width={960} height={600}
                 onSelectionChange={this.setSelection}
                 ref="map" />
             </div>
             <div className="filters">
               <div>
-                Visualize block groups by:&nbsp;
+                <strong style={{fontWeight: 400}}>Visualize block groups by:</strong>&nbsp;
                 <select onChange={() => this.refs.map.quantize(this.refs.metric.value)} ref="metric">
                   <option value="">None</option>
                   <option value="income">Median income</option>
